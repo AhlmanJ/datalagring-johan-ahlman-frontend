@@ -1,0 +1,212 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root{
+    --color-primary: #222831;
+    --color-secondary: #B55400;
+    --color-white:#EEEEEE;
+    --color-accent:#393E46;
+}
+
+*, *::before, *::after {box-sizing: border-box;}
+
+html, body {
+    cursor: default;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    font-family: Inter, sans-serif;
+    background-color: var(--color-primary);
+}
+
+p{
+    color: var(--color-secondary);
+}
+
+h1,h2,h3,h4,h5,h6 {
+    color:var(--color-secondary);
+    font-family: urbanist;
+}
+
+.header{
+    height: 80px;
+    align-items: center;
+    justify-content:space-between;
+    background-color: var(--color-secondary);
+    
+    .project-name-container{
+        width: 350px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        border-radius: 20px;
+        margin: .5em 0 0 3em;
+        justify-content: center;
+        background-color: var(--color-primary);
+        
+        .project-name{
+            font-size: 35px;
+            font-weight: bold;
+            color: var(--color-white);
+        }
+    }
+
+    h1{
+        color: var(--color-white);
+    }
+
+    .header-container{
+        display: flex;
+        justify-content:space-between;
+        gap: 1rem;
+
+        .nav{
+            width: 41em;
+            margin-right: 4em;
+            display: flex;
+            justify-content:space-between;
+            align-items: center;
+            cursor: pointer;
+
+
+            .nav-links{
+                display: flex;
+                font-size: 18px;
+                font-weight: bold;
+                text-decoration: none;
+                color: var(--color-white);
+                font-family: urbanist;
+
+                &:hover {
+                    color: var(--color-primary);
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}
+
+.homePage {
+  height: 100vh;
+  display: grid;
+  justify-content: center;
+  background-color: var(--color-primary);
+
+  .homePage-container {
+    margin-top: 4em;
+    height: 80vh;
+    width: 80vw;
+    overflow: auto;
+    color: var(--color-secondary);
+    background-color: var(--color-primary);
+    h1 {
+      color: var(--color-white);
+    }
+
+    .courses-header {
+      display: flex;
+      justify-content: center;
+    }
+
+    .coursesTiles-wrapper {
+      gap: 20px;
+      padding: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between; /* Lägg till detta för att ge kursbrickorna lite utrymme */
+    }
+
+    /* Kursbricka */
+    .course-tile {
+      width: 200px;
+      padding: 16px;
+      overflow: auto;
+      border: 1px solid var(--color-secondary); /* Definiera border färg */
+      border-radius: 8px;
+      text-align: center;
+      color: var(--color-secondary);
+      background-color: var(--color-secondary);
+      box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+
+      p {
+        color: var(--color-white);
+      }
+
+      h2 {
+        color: var(--color-white);
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+      }
+
+      &:hover {
+        background-color: var(--color-primary);
+        color: var(--color-secondary);
+        p {
+          color: var(--color-secondary);
+        }
+        h2 {
+          color: var(--color-secondary);
+        }
+      }
+    }
+  }
+}
+
+.lessonsPage{
+
+    h1{
+        
+        margin-top: 1em;
+        margin-bottom: 1em;
+        text-align: center;
+        color: var(--color-white);
+    }
+
+    .course-id{
+        margin-top: .5em;
+        margin-bottom: .5em;
+    }
+
+    .lessonsTiles-wrapper {
+
+        padding: 0 50px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+
+        .lesson-tile {
+            width: 250px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out, background-color 0.3s ease, color 0.3s ease;
+        }
+
+        
+        .lesson-tile:hover {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+        }
+
+        .lesson-tile:hover p {
+            color: var(--color-secondary);
+        }
+
+        .lesson-tile:hover h3 {
+            color: var(--color-secondary);  
+        }
+
+        .lesson-tile h3 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .lesson-tile p {
+            font-size: 1rem;
+            color: #555;
+        }
+    }
+}
