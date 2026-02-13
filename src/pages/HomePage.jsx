@@ -20,9 +20,9 @@ export default function HomePage() {
   return (
     <div className="homePage">
       <div className="homePage-container">
-        <h1 className="courses-header">Available Courses</h1>
+        <h1 className="courses-header">Available Courses <br /> Click on a course to view and book a lesson</h1>
         {courses.length === 0 ? (
-          <p>Inga kurser hittades</p>
+          <p>No courses available.</p>
         ) : (
           <div className="coursesTiles-wrapper">
             {courses.map((course) => (
