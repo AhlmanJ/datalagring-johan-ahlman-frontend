@@ -11,10 +11,10 @@ function Header() {
 
         <nav className='nav'>
         <Link className='nav-links' to="/">Home</Link>
-        <Link className='nav-links' to="/create-course">Create Course</Link>
-        <Link className='nav-links' to="/create-lesson">Create Lesson</Link>
-        <Link className='nav-links' to="/create-instructor">Create Instructor</Link>
-        <Link className='nav-links' to="/create-participant">Create Participant</Link>
+        <Link className='nav-links' to="/create-course">Course Admin</Link>
+        <Link className='nav-links' to="/create-lesson">Lesson Admin</Link>
+        <Link className='nav-links' to="/create-instructor">Instructor Admin</Link>
+        <Link className='nav-links' to="/create-participant">Participant Admin</Link>
         </nav>
 
       </div>

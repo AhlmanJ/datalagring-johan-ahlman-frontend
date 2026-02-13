@@ -289,8 +289,8 @@ h1,h2,h3,h4,h5,h6 {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 500px;
+  width: 300px;
+  max-width: 700px;
 }
 
 h1 {
@@ -307,13 +307,20 @@ h1 {
   margin-bottom: 10px;
 }
 
-/* Formulär */
 .createCourse-form {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
+/* Etiketter över input-fälten */
+.createCourse-form label {
+  font-size: 1rem;
+  color: var(--color-secondary);
+  margin-bottom: 8px;
+}
+
+/* Input och Textarea-styling */
 .createCourse-form input,
 .createCourse-form textarea {
   padding: 12px;
@@ -326,6 +333,7 @@ h1 {
   transition: border 0.3s ease;
 }
 
+/* När input eller textarea har fokus */
 .createCourse-form input:focus,
 .createCourse-form textarea:focus {
   border-color: var(--color-secondary);
@@ -333,10 +341,12 @@ h1 {
 }
 
 .createCourse-form textarea {
-  resize: vertical; /* Gör att textarea kan ändras i storlek vertikalt */
+  resize: vertical;
+  width: 250px;
   min-height: 120px;
 }
 
+/* För knappen */
 .createCourse-form button {
   background-color: var(--color-secondary);
   color: var(--color-white);
@@ -348,25 +358,125 @@ h1 {
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+/* Hover-effekt på knappen */
 .createCourse-form button:hover {
   background-color: var(--color-primary);
   transform: scale(1.05);
 }
 
+/* Aktiv knapp */
 .createCourse-form button:active {
   background-color: var(--color-accent);
 }
 
-/* För att justera knapparna och input-fälten i rätt position */
+/* Marginal på input, textarea och knapp */
 .createCourse-form input,
 .createCourse-form textarea,
 .createCourse-form button {
   margin: 10px 0;
 }
 
-.no-lessons-message {
-  color: var(--color-secondary);
-  font-size: 1rem;
+.createParticipantPage {
+  font-family: Inter;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--color-primary);
+}
+
+.createParticipant-container {
+  background-color: var(--color-white);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  max-width: 700px;
+}
+
+.createParticipant-title {
   text-align: center;
-  margin-top: 20px;
+  font-size: 24px;
+  color: var(--color-secondary);
+  margin-bottom: 20px;
+}
+
+.success-message {
+  color: #4caf50;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.createParticipant-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Etiketter över input-fälten */
+.createParticipant-form label {
+  font-size: 1rem;
+  color: var(--color-secondary);
+  margin-bottom: 8px;
+}
+
+/* Input och Textarea-styling */
+.createParticipant-form input {
+  padding: 12px;
+  font-size: 1rem;
+  font-family: Inter;
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  transition: border 0.3s ease;
+}
+
+.createParticipant-form input:focus {
+  border-color: var(--color-secondary);
+  outline: none;
+}
+
+/* För knappen */
+.createParticipant-form button {
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.createParticipant-form button:hover {
+  background-color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.createParticipant-form button:active {
+  background-color: var(--color-accent);
+}
+
+/* Styling för lägg till nummer-knappen */
+.add-phone-btn {
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-phone-btn:hover {
+  background-color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.add-phone-btn:active {
+  background-color: var(--color-accent);
 }

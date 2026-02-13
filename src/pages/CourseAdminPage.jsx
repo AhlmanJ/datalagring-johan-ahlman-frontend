@@ -6,24 +6,23 @@ export default function CreateCourse() {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+
   const handleCourseNameChange = (e) => {
     setCourseName(e.target.value);
-    console.log("Course Name changed to:", e.target.value); // Logga ändringar i kursnamnet
   };
+
 
   const handleCourseDescriptionChange = (e) => {
     setCourseDescription(e.target.value);
-    console.log("Course Description changed to:", e.target.value); // Logga ändringar i kursbeskrivningen
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted");
 
-    // Kontrollera att både kursnamn och beskrivning är ifyllda
+
     if (!courseName || !courseDescription) {
       setErrorMessage("Both fields are required.");
-      console.log("Validation failed: Both fields are required."); // Logga valideringsfel
       return;
     }
 
@@ -31,8 +30,6 @@ export default function CreateCourse() {
       name: courseName,
       description: courseDescription,
     };
-
-    console.log("Payload to be sent:", payload); // Logga payload innan förfrågan skickas
 
     try {
       const response = await fetch("https://localhost:7253/api/courses/", {
@@ -43,22 +40,18 @@ export default function CreateCourse() {
         body: JSON.stringify(payload),
       });
 
-      console.log("Response received:", response); // Logga serverns svar
-
       if (!response.ok) {
         throw new Error("Error creating course");
       }
 
       const data = await response.json();
-      console.log("Course created:", data); // Logga det skapade kursdata
-
-      setCourseName(""); // Rensa kursnamnet
-      setCourseDescription(""); // Rensa beskrivningen
+      setCourseName(""); 
+      setCourseDescription(""); 
       setMessage("Course created successfully!");
-      setErrorMessage(""); // Rensa felmeddelande om framgång
+      setErrorMessage(""); 
 
     } catch (error) {
-      console.error("Error during course creation:", error); // Logga fel
+      console.error("Error during course creation:", error);
       setErrorMessage("Error creating course, please try again.");
     }
   };

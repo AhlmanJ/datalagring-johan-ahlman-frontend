@@ -181,9 +181,10 @@ export default function LessonsPage() {
   return (
     <div className="lessonsPage">
       <h1>Lessons for Course: <div className="course-id">{courseId}</div></h1>
+      <h1>Click on a lesson to book or delete a booking</h1>
       <div>
         {lessons.length === 0 ? (
-          <p>No lessons found for this course.</p>
+          <p className="no-lessons-message">No lessons found for this course.</p>
         ) : (
           <div className="lessonsTiles-wrapper">
             {lessons.map((lesson) => (
