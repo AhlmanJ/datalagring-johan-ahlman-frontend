@@ -113,15 +113,15 @@ h1,h2,h3,h4,h5,h6 {
       padding: 16px;
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between; /* Lägg till detta för att ge kursbrickorna lite utrymme */
+      justify-content: flex-start;
     }
 
-    /* Kursbricka */
+ 
     .course-tile {
       width: 200px;
       padding: 16px;
       overflow: auto;
-      border: 1px solid var(--color-white); /* Definiera border färg */
+      border: 1px solid var(--color-white); 
       border-radius: 8px;
       text-align: center;
       color: var(--color-secondary);
@@ -216,6 +216,7 @@ h1,h2,h3,h4,h5,h6 {
     margin-top: 2em;
     margin-left: 3em;
     padding: 20px;
+    justify-self: center;
     background-color: var(--color-white);
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -261,6 +262,7 @@ h1,h2,h3,h4,h5,h6 {
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    margin-left: 10px;
     transition: background-color 0.3s ease, transform 0.2s ease;
 
     &:hover {
@@ -271,4 +273,100 @@ h1,h2,h3,h4,h5,h6 {
     &:active {
         background-color: var(--color-accent);
     }
+}
+
+.createCoursePage {
+  font-family: Inter;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--color-primary);
+}
+
+.createCourse-container {
+  background-color: var(--color-white);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 24px;
+  color: var(--color-secondary);
+  margin-bottom: 20px;
+}
+
+.error-message {
+  color: #ff0000;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Formulär */
+.createCourse-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.createCourse-form input,
+.createCourse-form textarea {
+  padding: 12px;
+  font-size: 1rem;
+  font-family: Inter;
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  transition: border 0.3s ease;
+}
+
+.createCourse-form input:focus,
+.createCourse-form textarea:focus {
+  border-color: var(--color-secondary);
+  outline: none;
+}
+
+.createCourse-form textarea {
+  resize: vertical; /* Gör att textarea kan ändras i storlek vertikalt */
+  min-height: 120px;
+}
+
+.createCourse-form button {
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.createCourse-form button:hover {
+  background-color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.createCourse-form button:active {
+  background-color: var(--color-accent);
+}
+
+/* För att justera knapparna och input-fälten i rätt position */
+.createCourse-form input,
+.createCourse-form textarea,
+.createCourse-form button {
+  margin: 10px 0;
+}
+
+.no-lessons-message {
+  color: var(--color-secondary);
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 20px;
 }

@@ -4,9 +4,10 @@ import { useParams } from "react-router-dom";
 export default function LessonsPage() {
   const { courseId } = useParams(); // Get course-ID from the URL-parameter
   const [lessons, setLessons] = useState([]);
-  const [participants, setParticipants] = useState([]); // New state for participants
-  const [selectedLesson, setSelectedLesson] = useState(null); // Track selected lesson
-  const [selectedParticipant, setSelectedParticipant] = useState(null); // Track selected participant
+  const [participants, setParticipants] = useState([]);
+  const [enrollments, setEnrollments] = useState([]);  // To store enrollments data
+  const [selectedLesson, setSelectedLesson] = useState(null);
+  const [selectedParticipant, setSelectedParticipant] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Simple date format function
@@ -15,8 +16,8 @@ export default function LessonsPage() {
     return date.toLocaleString(); // You can customize the format here
   };
 
+  // Fetch lessons, participants, and enrollments when the page loads
   useEffect(() => {
-    // Fetch lessons
     console.log("Course ID:", courseId);
 
     if (!courseId) {
@@ -24,13 +25,9 @@ export default function LessonsPage() {
       return;
     }
 
+    // Fetch lessons
     fetch(`https://localhost:7253/api/courses/${courseId}/lessons`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
         console.log("Lessons data:", data);
         setLessons(data);
@@ -42,47 +39,44 @@ export default function LessonsPage() {
       });
 
     // Fetch participants
-    fetch("https://localhost:7253/api/participants") // API endpoint for participants
+    fetch("https://localhost:7253/api/participants")
       .then((res) => res.json())
       .then((data) => {
         setParticipants(data);
-        console.log("Participants data:", data); // Debug: check what participants data looks like
+        console.log("Participants data:", data);
       })
       .catch((err) => console.error("Error fetching participants:", err));
 
-  }, [courseId]);
+    // Fetch all enrollments to associate with participants and load from localStorage
+    const savedEnrollments = JSON.parse(localStorage.getItem("enrollments")) || [];
+    setEnrollments(savedEnrollments);
+    console.log("Enrollments data from localStorage:", savedEnrollments);
 
+  }, [courseId]); // The effect runs every time the courseId changes
+
+  // Handle booking a participant to a lesson
   const handleBooking = () => {
-    console.log("Booking button clicked"); // Debugging log
-    // Check if both a lesson and a participant are selected before attempting to book
+    console.log("Booking button clicked");
     if (selectedLesson && selectedParticipant) {
-      // Debugging logs to verify selected lesson and participant
-      console.log("Selected Lesson ID:", selectedLesson.id); // this should be the lesson's ID
-      console.log("Selected Participant ID:", selectedParticipant.participantId); // this should be the participant's ID
+      console.log("Selected Lesson ID:", selectedLesson.id);
+      console.log("Selected Participant ID:", selectedParticipant.participantId);
 
-      // Convert IDs to uppercase (if necessary)
       const participantId = selectedParticipant.participantId.toUpperCase();
       const lessonId = selectedLesson.id.toUpperCase();
 
-      // Prepare the booking data
       const bookingData = {
         participantId: participantId,
         lessonsId: lessonId
       };
 
-      // Construct the URL for the booking endpoint
       const bookingUrl = `https://localhost:7253/api/enrollments?participantId=${participantId}&lessonsId=${lessonId}`;
-      // Debugging: Check the booking data and URL
-      console.log("Booking Data:", bookingData);
-      console.log("Booking URL:", bookingUrl);
 
-      // Send POST request to the API with the booking data
       fetch(bookingUrl, {
-        method: "POST",  // POST since we are sending data to create a new resource
+        method: "POST", // Use POST since we are creating a new resource
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(bookingData),  // Send the booking data as JSON
+        body: JSON.stringify(bookingData),
       })
         .then((res) => {
           if (!res.ok) {
@@ -92,6 +86,21 @@ export default function LessonsPage() {
         })
         .then((data) => {
           console.log("Booking successful:", data);
+
+          // Update enrollments after booking
+          const newEnrollment = { 
+            participantId: selectedParticipant.participantId, 
+            lessonName: selectedLesson.name, 
+            enrollmentId: data.enrollmentId 
+          };
+
+          // Update enrollments state
+          setEnrollments((prevEnrollments) => [...prevEnrollments, newEnrollment]);
+
+          // Save the updated enrollments to localStorage
+          const updatedEnrollments = [...enrollments, newEnrollment];
+          localStorage.setItem("enrollments", JSON.stringify(updatedEnrollments));
+
           alert("Booking successful!");
         })
         .catch((err) => {
@@ -99,16 +108,76 @@ export default function LessonsPage() {
           alert("Something went wrong while booking the lesson.");
         });
     } else {
-      // If either lesson or participant is not selected, show an error message
-      console.error("Please select both a lesson and a participant.");
       alert("Please select both a lesson and a participant.");
     }
+  };
+
+  // Handle deleting a participant's enrollment
+  const handleDeleteBooking = () => {
+    if (selectedLesson && selectedParticipant) {
+      const participantId = selectedParticipant.participantId.toUpperCase();
+      const lessonName = selectedLesson.name; // lessonName is now lesson's name
+
+      // Step 1: Find the enrollmentId that matches the lessonName
+      const enrollment = enrollments.find(
+        (e) => e.lessonName === lessonName && e.participantId === selectedParticipant.participantId
+      );
+
+      if (enrollment) {
+        const enrollmentId = enrollment.enrollmentId;
+
+        // Step 2: Send DELETE request with the enrollmentId
+        const deleteUrl = `https://localhost:7253/api/enrollments/${enrollmentId}/${lessonName}/${participantId}`;
+        fetch(deleteUrl, {
+          method: "DELETE", // DELETE method to remove the booking
+        })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+            }
+
+            // Remove the enrollment from localStorage
+            const savedEnrollments = JSON.parse(localStorage.getItem("enrollments")) || [];
+            const updatedEnrollments = savedEnrollments.filter(
+              (e) => e.enrollmentId !== enrollmentId
+            );
+            
+            // If there are no enrollments left, remove the whole key from localStorage
+            if (updatedEnrollments.length === 0) {
+              localStorage.removeItem("enrollments");
+            } else {
+              localStorage.setItem("enrollments", JSON.stringify(updatedEnrollments));
+            }
+
+            // Remove the enrollment from state as well
+            setEnrollments(updatedEnrollments);
+
+            alert("Booking has been successfully removed!");
+          })
+          .catch((err) => {
+            console.error("Delete failed:", err);
+            alert("Something went wrong while deleting the booking.");
+          });
+      } else {
+        alert("Enrollment not found for the selected lesson.");
+      }
+    } else {
+      alert("Please select both a lesson and a participant to delete.");
+    }
+  };
+
+  // Add enrolled lesson name to each participant in dropdown
+  const getEnrolledLessonName = (participantId) => {
+    const enrollment = enrollments.find(
+      (e) => e.participantId === participantId
+    );
+    return enrollment ? enrollment.lessonName : "Not enrolled"; // Return "Not enrolled" if no lesson found
   };
 
   if (loading) {
     return <p>Loading lessons...</p>;
   }
-
+  
   return (
     <div className="lessonsPage">
       <h1>Lessons for Course: <div className="course-id">{courseId}</div></h1>
@@ -122,16 +191,16 @@ export default function LessonsPage() {
                 key={lesson.id}
                 className="lesson-tile"
                 onClick={() => {
-                  setSelectedLesson(lesson); // capture the entire lesson object when a lesson is clicked
-                  console.log("Selected Lesson:", lesson); // debugging: check what the selected lesson object looks like when clicked
+                  setSelectedLesson(lesson);
+                  console.log("Selected Lesson:", lesson);
                 }}
               >
                 <h3>{lesson.name}</h3>
                 <p>{formatDate(lesson.startDate)} - {formatDate(lesson.endDate)}</p>
-                <p>Kapacitet: {lesson.maxCapacity}</p>
-                <p>Platser lediga: {lesson.maxCapacity - lesson.enrolled}</p>
-                <p>Kursnamn: {lesson.courseName}</p>
-                <p>Plats: {lesson.location}</p>
+                <p>Capacity: {lesson.maxCapacity}</p>
+                <p>Available spaces: {lesson.maxCapacity - lesson.enrolled}</p>
+                <p>Course name: {lesson.courseName}</p>
+                <p>Location: {lesson.location}</p>
               </div>
             ))}
           </div>
@@ -144,24 +213,26 @@ export default function LessonsPage() {
             <select
               id="participants"
               onChange={(e) => {
-                const selectedId = e.target.value; // ID from dropdown-choice
-                console.log("Selected Participant ID:", selectedId); // Debugging: check selected participant ID from dropdown
-                const participant = participants.find((p) => p.participantId === selectedId); // Find the participant object based on the selected ID
+                const selectedId = e.target.value;
+                console.log("Selected Participant ID:", selectedId);
+                const participant = participants.find((p) => p.participantId === selectedId);
                 setSelectedParticipant(participant);
-                console.log("Selected Participant:", participant); // Debugging: Check the selected participant object after finding it in the participants array
+                console.log("Selected Participant:", participant);
               }}
             >
               <option value="">Select participant</option>
               {participants.map((participant) => (
                 <option key={participant.participantId} value={participant.participantId}>
-                  {participant.firstName} {participant.lastName} {/* Show first and last name */}
+                  {participant.firstName} {participant.lastName} 
+                  {` - ${getEnrolledLessonName(participant.participantId)}`}  {/* Show lesson name if enrolled */}
                 </option>
               ))}
             </select>
             <button onClick={handleBooking}>Book participant</button>
+            <button onClick={handleDeleteBooking}>Delete booking</button>
           </div>
         )}
       </div>
     </div>
-  );
+  ); 
 }
