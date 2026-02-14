@@ -4,39 +4,50 @@ export default function CreateInstructor() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [expertise, setExpertise] = useState("");  // Expertise input field
+  const [expertise, setExpertise] = useState("");
   const [instructors, setInstructors] = useState([]);
-  const [editingInstructorId, setEditingInstructorId] = useState(null); // For edit mode
+  const [lessons, setLessons] = useState([]);
+  const [selectedLesson, setSelectedLesson] = useState("");
+  const [editingInstructorId, setEditingInstructorId] = useState(null);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Fetch instructors on component load
+  // Fetch instructors and lessons based on the courseId
   useEffect(() => {
-    const fetchInstructors = async () => {
+    const courseId = "27843B9A-9709-F111-A01D-24B2B9493A6C";  // Replace with the actual courseId you're using in your app
+
+    const fetchInstructorsAndLessons = async () => {
       try {
-        const response = await fetch("https://localhost:7253/api/instructors");
-        if (!response.ok) throw new Error("Error fetching instructors");
-        const data = await response.json();
-        setInstructors(data);
+        // Fetch instructors
+        const instructorsResponse = await fetch("https://localhost:7253/api/instructors");
+        if (!instructorsResponse.ok) throw new Error("Error fetching instructors");
+        const instructorsData = await instructorsResponse.json();
+        setInstructors(instructorsData);
+
+        // Fetch lessons for the specific courseId
+        const lessonsResponse = await fetch(`https://localhost:7253/api/courses/${courseId}/lessons`);
+        if (!lessonsResponse.ok) throw new Error("Error fetching lessons");
+        const lessonsData = await lessonsResponse.json();
+        setLessons(lessonsData);
       } catch (error) {
-        console.error("Error fetching instructors:", error);
+        console.error("Error fetching data:", error);
+        setErrorMessage("An error occurred while fetching the data.");
       }
     };
 
-    fetchInstructors();
+    fetchInstructorsAndLessons();
   }, []);
 
-  // Handle input changes
   const handleFirstNameChange = (e) => setFirstName(e.target.value);
   const handleLastNameChange = (e) => setLastName(e.target.value);
   const handleEmailChange = (e) => setEmail(e.target.value);
-  const handleExpertiseChange = (e) => setExpertise(e.target.value);  // Expertise input change handler
+  const handleExpertiseChange = (e) => setExpertise(e.target.value);
 
   // Handle submit for both create and update
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!firstName || !lastName || !email || !expertise) {
+    if (!firstName || !lastName || !email || !expertise || !selectedLesson) {
       setErrorMessage("All fields are required.");
       return;
     }
@@ -45,12 +56,12 @@ export default function CreateInstructor() {
       firstName,
       lastName,
       email,
-      expertise,  // Include expertise in the payload
+      expertise,
+      lessonId: selectedLesson,  // Add selected lessonId to the payload
     };
 
     try {
       if (editingInstructorId) {
-        console.log("Editing instructor with ID:", editingInstructorId);  // Debugging log
         const response = await fetch(
           `https://localhost:7253/api/instructors/${editingInstructorId}`,
           {
@@ -65,7 +76,6 @@ export default function CreateInstructor() {
 
         setMessage("Instructor updated successfully!");
       } else {
-        // POST request to create a new instructor
         const response = await fetch("https://localhost:7253/api/instructors", {
           method: "POST",
           headers: {
@@ -83,8 +93,9 @@ export default function CreateInstructor() {
       setFirstName("");
       setLastName("");
       setEmail("");
-      setExpertise("");  // Reset expertise
-      setEditingInstructorId(null); // Reset to create mode
+      setExpertise("");
+      setSelectedLesson("");  // Reset selected lesson
+      setEditingInstructorId(null);
 
       const fetchResponse = await fetch("https://localhost:7253/api/instructors");
       const data = await fetchResponse.json();
@@ -97,12 +108,12 @@ export default function CreateInstructor() {
 
   // Handle updating instructor
   const handleUpdateInstructor = (instructor) => {
-    console.log("Editing Instructor ID:", instructor.instructorId);  // Debugging: Check the ID being passed
-    setEditingInstructorId(instructor.instructorId);  // Set the instructor's ID for editing
+    setEditingInstructorId(instructor.instructorId);
     setFirstName(instructor.firstName);
     setLastName(instructor.lastName);
     setEmail(instructor.email);
-    setExpertise(instructor.expertise);  // Set expertise for editing
+    setExpertise(instructor.expertise);
+    setSelectedLesson(instructor.lessonId);  // Set selected lesson for editing
   };
 
   // Handle deleting instructor
@@ -118,15 +129,12 @@ export default function CreateInstructor() {
 
       setMessage("Instructor deleted successfully!");
 
-      // Remove the instructor from the list locally
       setInstructors(instructors.filter((instructor) => instructor.instructorId !== instructorId));
     } catch (error) {
       console.error("Error deleting instructor:", error);
       setErrorMessage("Error deleting instructor, please try again.");
     }
   };
-
-  console.log("Current editingInstructorId:", editingInstructorId);  // Debug: Check the current value of editingInstructorId
 
   return (
     <div className="createInstructorPage">
@@ -135,7 +143,6 @@ export default function CreateInstructor() {
         {message && <p className="success-message">{message}</p>}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-        {/* Form for creating/updating instructor */}
         <form onSubmit={handleSubmit} className="createInstructor-form">
           <div className="form-group">
             <label htmlFor="firstName">First Name:</label>
@@ -179,10 +186,28 @@ export default function CreateInstructor() {
               type="text"
               id="expertise"
               value={expertise}
-              onChange={handleExpertiseChange}  // Handle expertise change
+              onChange={handleExpertiseChange}
               className="form-input"
               required
             />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="lesson">Select Lesson:</label>
+            <select
+              id="lesson"
+              value={selectedLesson}
+              onChange={(e) => setSelectedLesson(e.target.value)}
+              className="form-input"
+              required
+            >
+              <option value="">Select a lesson</option>
+              {lessons.map((lesson) => (
+                <option key={lesson.id} value={lesson.id}>
+                  {lesson.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <button type="submit" className="form-button">
@@ -190,7 +215,6 @@ export default function CreateInstructor() {
           </button>
         </form>
 
-        {/* List of existing instructors */}
         <div className="instructor-list">
           <h2>Existing Instructors</h2>
           {instructors.length === 0 ? (
@@ -198,10 +222,11 @@ export default function CreateInstructor() {
           ) : (
             <ul>
               {instructors.map((instructor) => (
-                <li key={instructor.instructorId}> {/* Use instructorId as the key */}
+                <li key={instructor.instructorId}>
                   <h3>{instructor.firstName} {instructor.lastName}</h3>
                   <p><strong>Email:</strong> {instructor.email}</p>
-                  <p><strong>Expertise:</strong> {instructor.expertise}</p>  {/* Display expertise */}
+                  <p><strong>Expertise:</strong> {instructor.expertise}</p>
+                  <p><strong>Assigned Lesson:</strong> {instructor.lessonName}</p>
                   <div className="instructor-actions">
                     <button
                       onClick={() => handleUpdateInstructor(instructor)}
