@@ -97,7 +97,7 @@ export default function CreateCourse() {
 
   // Handle updating course
   const handleUpdateCourse = (course) => {
-    setEditingCourseId(course.id);
+    setEditingCourseId(course.id); // Set the course ID for editing
     setCourseName(course.name);
     setCourseDescription(course.description);
   };
@@ -130,6 +130,7 @@ export default function CreateCourse() {
         {message && <p className="success-message">{message}</p>}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
 
+        {/* Form for creating/updating course */}
         <form onSubmit={handleSubmit} className="createCourse-form">
           <div className="form-group">
             <label htmlFor="courseName">Course Name:</label>
