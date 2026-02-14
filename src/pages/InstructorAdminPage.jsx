@@ -205,25 +205,7 @@ export default function CreateInstructor() {
               required
             />
           </div>
-
-          <div className="form-group">
-            <label htmlFor="lesson">Select Lesson:</label>
-            <select
-              id="lesson"
-              value={selectedLesson}
-              onChange={(e) => setSelectedLesson(e.target.value)}
-              className="form-input"
-              required
-            >
-              <option value="">Select a lesson</option>
-              {lessons.map((lesson) => (
-                <option key={lesson.id} value={lesson.id}>
-                  {lesson.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
+  
           <button type="submit" className="form-button">
             {editingInstructorId ? "Update Instructor" : "Create Instructor"}
           </button>

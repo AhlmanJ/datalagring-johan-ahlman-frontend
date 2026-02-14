@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 
 export default function RegisterInstructorPage() {
-  const [courses, setCourses] = useState([]);  // Lista för kurser
+  const [courses, setCourses] = useState([]);
   const [instructors, setInstructors] = useState([]);
   const [lessons, setLessons] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState("");  // För vald kurs
+  const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedInstructor, setSelectedInstructor] = useState("");
   const [selectedLesson, setSelectedLesson] = useState("");
   const [message, setMessage] = useState("");
@@ -15,12 +15,12 @@ export default function RegisterInstructorPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Hämta kurser
+        // Get courses
         const coursesResponse = await fetch("https://localhost:7253/api/courses");
         const coursesData = await coursesResponse.json();
         setCourses(coursesData);
 
-        // Hämta instruktörer
+        // Get instructors
         const instructorsResponse = await fetch("https://localhost:7253/api/instructors");
         const instructorsData = await instructorsResponse.json();
         setInstructors(instructorsData);
@@ -36,7 +36,7 @@ export default function RegisterInstructorPage() {
     fetchData();
   }, []);
 
-  // När en kurs är vald, hämta tillhörande lektioner
+  // When selectedCourse changes, fetch the lessons for that course
   useEffect(() => {
     const fetchLessons = async () => {
       if (selectedCourse) {
@@ -52,7 +52,7 @@ export default function RegisterInstructorPage() {
     };
 
     fetchLessons();
-  }, [selectedCourse]);  // Hämta lektioner när kursen ändras
+  }, [selectedCourse]);  // Get lessons every time the selected course changes
 
   const handleSubmit = async (e) => {
     e.preventDefault();
