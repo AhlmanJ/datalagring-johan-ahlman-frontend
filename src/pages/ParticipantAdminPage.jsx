@@ -220,7 +220,7 @@ export default function CreateParticipant() {
           ) : (
             <ul>
               {participants.map((participant) => (
-                <li key={participant.email}> {/* Use email as key */}
+                <li key={participant.email}>
                   <h3>{participant.firstName} {participant.lastName}</h3>
                   <p><strong>Email:</strong> {participant.email}</p>
                   <p><strong>Phone Numbers:</strong> {participant.phoneNumbers && participant.phoneNumbers.length > 0 ? participant.phoneNumbers.join(", ") : "No phone numbers"}</p>

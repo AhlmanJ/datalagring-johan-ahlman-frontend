@@ -20,15 +20,15 @@ export default function HomePage() {
 
   const handleCourseClick = async (courseId) => {
     try {
-      // Hämta lektioner för den valda kursen
+      // Get lessons for the selected course to check if there are any available
       const lessonsResponse = await fetch(`https://localhost:7253/api/courses/${courseId}/lessons`);
       const lessonsData = await lessonsResponse.json();
 
       if (lessonsData.length === 0) {
-        // Visa meddelande om inga lektioner
+        // Display message if no lessons are available for the selected course
         alert("Inga lektioner finns tillgängliga ännu.");
       } else {
-        // Navigera till lektioner om det finns
+        // Navigate to the lessons page for the selected course
         navigate(`/courses/${courseId.toUpperCase()}/lessons`);
       }
     } catch (error) {
@@ -52,7 +52,7 @@ export default function HomePage() {
               <div
                 className="course-tile"
                 key={course.id}
-                onClick={() => handleCourseClick(course.id)} // Hantera klick på kurs
+                onClick={() => handleCourseClick(course.id)} // Handle click to navigate to lessons page
                 style={{ cursor: "pointer" }}
               >
                 <h2>{course.name}</h2>
@@ -62,7 +62,7 @@ export default function HomePage() {
           </div>
         )}
 
-        {message && <p className="no-lessons-message">{message}</p>} {/* Visa meddelandet om inga lektioner */}
+        {message && <p className="no-lessons-message">{message}</p>} {/* Display message if no lessons are available */}
       </div>
     </div>
   );
