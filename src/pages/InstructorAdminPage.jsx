@@ -62,7 +62,8 @@ export default function CreateInstructor() {
 
     try {
       if (editingInstructorId) {
-        const response = await fetch(
+        // First update the instructor information
+        const updateInstructorResponse = await fetch(
           `https://localhost:7253/api/instructors/${editingInstructorId}`,
           {
             method: "PUT",
@@ -72,10 +73,23 @@ export default function CreateInstructor() {
             body: JSON.stringify(payload),
           }
         );
-        if (!response.ok) throw new Error("Error updating instructor");
+        if (!updateInstructorResponse.ok) throw new Error("Error updating instructor");
 
-        setMessage("Instructor updated successfully!");
+        // Then associate the instructor with the selected lesson
+        const associateInstructorResponse = await fetch(
+          `https://localhost:7253/api/instructors/${editingInstructorId}/lesson/${selectedLesson}`,
+          {
+            method: "PUT",
+            headers: {
+              "accept": "*/*",
+            },
+          }
+        );
+        if (!associateInstructorResponse.ok) throw new Error("Error associating instructor to lesson");
+
+        setMessage("Instructor updated and associated with lesson successfully!");
       } else {
+        // Handle creating a new instructor
         const response = await fetch("https://localhost:7253/api/instructors", {
           method: "POST",
           headers: {
@@ -226,7 +240,6 @@ export default function CreateInstructor() {
                   <h3>{instructor.firstName} {instructor.lastName}</h3>
                   <p><strong>Email:</strong> {instructor.email}</p>
                   <p><strong>Expertise:</strong> {instructor.expertise}</p>
-                  <p><strong>Assigned Lesson:</strong> {instructor.lessonName}</p>
                   <div className="instructor-actions">
                     <button
                       onClick={() => handleUpdateInstructor(instructor)}

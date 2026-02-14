@@ -17,6 +17,7 @@ function Header() {
         <Link className='nav-links' to="/create-instructor">Instructor Admin</Link>
         <Link className='nav-links' to="/create-participant">Participant Admin</Link>
         <Link className='nav-links' to="/enrollments">Enrollments</Link>
+        <Link className='nav-links' to="/enroll-instructor">Enroll Instructor</Link>
         </nav>
 
       </div>
