@@ -13,6 +13,7 @@ export default function CreateLesson() {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [editingLessonId, setEditingLessonId] = useState(null);
+  const [email, setEmail] = useState(""); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,14 +35,6 @@ export default function CreateLesson() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Skip validation for all fields when editing
-    if (!editingLessonId) {
-      if (!lessonName || !startDate || !endDate || !capacity || !location || !courseId) {
-        setErrorMessage("All fields are required.");
-        return;
-      }
-    }
-
     const formattedCourseId = courseId.toUpperCase();
     const payload = {
       name: lessonName,
@@ -52,6 +45,7 @@ export default function CreateLesson() {
     };
 
     if (editingLessonId) {
+      
       try {
         const response = await fetch(`https://localhost:7253/api/courses/lessons/${editingLessonId}`, {
           method: "PUT",
@@ -65,7 +59,6 @@ export default function CreateLesson() {
         setStartDate("");
         setEndDate("");
         setCapacity("");
-        setLocation("");
       } catch (error) {
         setErrorMessage("Error updating lesson, please try again.");
       }
@@ -96,6 +89,7 @@ export default function CreateLesson() {
     setEndDate(lesson.endDate);
     setCapacity(lesson.maxCapacity);
     setLocation(lesson.locationName);
+    setEmail(lesson.email);
   };
 
   const handleDeleteLesson = async (lessonId) => {

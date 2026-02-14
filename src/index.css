@@ -815,9 +815,9 @@ h1 {
   opacity: 0.8;
 }
 
-/* Styling for update button */
+
 .update-button {
-  background-color: #4CAF50; /* Green color */
+  background-color: #4CAF50;
   color: white;
   margin-left: -10px;
   padding: 10px 20px;
@@ -829,21 +829,19 @@ h1 {
 }
 
 .update-button:hover {
-  background-color: #45a049; /* Darker green on hover */
+  background-color: #45a049; 
 }
 
 .update-button:active {
-  background-color: #388e3c; /* Even darker green on click */
+  background-color: #388e3c; 
 }
 
 .update-button:focus {
-  outline: none; /* Remove focus outline */
+  outline: none; 
 }
 
-/* Styling for delete button */
 .delete-button {
-  background-color: #f44336; /* Red color */
-  color: white;
+  background-color: #f44336; 
   margin-left: 10px;
   padding: 10px 20px;
   border: none;
@@ -854,25 +852,24 @@ h1 {
 }
 
 .delete-button:hover {
-  background-color: #e53935; /* Darker red on hover */
+  background-color: #e53935; 
 }
 
 .delete-button:active {
-  background-color: #c62828; /* Even darker red on click */
+  background-color: #c62828; 
 }
 
 .delete-button:focus {
-  outline: none; /* Remove focus outline */
+  outline: none; 
 }
 
-/* Optional - Styling for buttons container */
+
 .lesson-actions {
   margin-top: 10px;
   display: flex;
   gap: 10px;
 }
 
-/* General styling for the page */
 .create-lesson-page {
   display: flex;
   justify-content: center;
@@ -889,31 +886,30 @@ h1 {
   justify-content: center;
 }
 
-/* Form container styling */
 .lesson-form {
   flex: 1;
   max-width: 600px;
-  background-color: var(--color-white); /* White background, matching your other pages */
+  background-color: var(--color-white); 
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Light shadow for a subtle 3D effect */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
 }
 
 .lesson-form h1 {
-  text-align: center; /* Center the title */
-  font-size: 2rem; /* Larger font size */
-  color: var(--color-primary); /* Primary color for the title */
-  margin-bottom: 20px; /* Space between the title and form */
+  text-align: center; 
+  font-size: 2rem; 
+  color: var(--color-primary); 
+  margin-bottom: 20px; 
 }
 
-/* Form elements styling */
+
 .lesson-form .form-group {
   margin-bottom: 15px;
 }
 
 .lesson-form .form-group label {
   font-weight: bold;
-  color: var(--color-secondary); /* Match with your primary color for labels */
+  color: var(--color-secondary); 
 }
 
 .lesson-form .form-group input,
@@ -922,7 +918,7 @@ h1 {
   padding: 10px;
   margin-top: 5px;
   border-radius: 8px;
-  border: 1px solid var(--color-primary); /* Match your primary color for borders */
+  border: 1px solid var(--color-primary); 
   background-color: var(--color-white);
   color: var(--color-primary);
   font-size: 1rem;
@@ -932,13 +928,12 @@ h1 {
 .lesson-form .form-group input:focus,
 .lesson-form .form-group select:focus {
   outline: none;
-  border-color: var(--color-secondary); /* Highlight with secondary color on focus */
+  border-color: var(--color-secondary); 
 }
 
 .lesson-form button {
   padding: 12px 24px;
-  background-color: var(--color-secondary); /* Match the button color */
-  color: var(--color-white);
+  background-color: var(--color-secondary); 
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -947,22 +942,22 @@ h1 {
 }
 
 .lesson-form button:hover {
-  background-color: var(--color-primary); /* Button hover effect */
+  background-color: var(--color-primary); 
   transform: scale(1.05);
 }
 
 .lesson-form button:active {
-  background-color: var(--color-accent); /* Darker accent color when clicked */
+  background-color: var(--color-accent); 
 }
 
-/* Lesson list on the right */
+
 .lesson-list {
   flex: 1;
   max-width: 350px;
   background-color: var(--color-white);
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Similar background and shadow as the form */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
 }
 
 .lesson-list ul {
@@ -974,7 +969,7 @@ h1 {
   margin-bottom: 20px;
   padding: 15px;
   background-color: var(--color-white);
-  border: 1px solid var(--color-primary); /* Use primary color border */
+  border: 1px solid var(--color-primary);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -994,7 +989,7 @@ h1 {
 }
 
 .update-button {
-  background-color: #4CAF50; /* Green for update */
+  background-color: #4CAF50; 
   color: white;
 }
 
@@ -1003,7 +998,7 @@ h1 {
 }
 
 .delete-button {
-  background-color: #f44336; /* Red for delete */
+  background-color: #f44336; 
   color: white;
 }
 
@@ -1011,11 +1006,10 @@ h1 {
   background-color: #e53935;
 }
 
-/* Success/Error messages */
 .success-message {
-  color: #4caf50; /* Green for success */
+  color: #4caf50; 
 }
 
 .error-message {
-  color: #f44336; /* Red for error */
+  color: #f44336; 
 }
