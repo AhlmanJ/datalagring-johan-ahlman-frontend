@@ -202,6 +202,7 @@ export default function LessonsPage() {
                 <p>Available spaces: {lesson.maxCapacity - lesson.enrolled}</p>
                 <p>Course name: {lesson.courseName}</p>
                 <p>Location: {lesson.location}</p>
+                <p>Instructor: {lesson.instructors}</p>
               </div>
             ))}
           </div>

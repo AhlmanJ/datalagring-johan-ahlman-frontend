@@ -60,7 +60,7 @@ h1,h2,h3,h4,h5,h6 {
         gap: 1rem;
 
         .nav{
-            width: 41em;
+            width: 55em;
             margin-right: 4em;
             display: flex;
             justify-content:space-between;
@@ -313,14 +313,14 @@ h1 {
   gap: 15px;
 }
 
-/* Etiketter över input-fälten */
+
 .createCourse-form label {
   font-size: 1rem;
   color: var(--color-secondary);
   margin-bottom: 8px;
 }
 
-/* Input och Textarea-styling */
+
 .createCourse-form input,
 .createCourse-form textarea {
   padding: 12px;
@@ -333,7 +333,7 @@ h1 {
   transition: border 0.3s ease;
 }
 
-/* När input eller textarea har fokus */
+
 .createCourse-form input:focus,
 .createCourse-form textarea:focus {
   border-color: var(--color-secondary);
@@ -346,7 +346,7 @@ h1 {
   min-height: 120px;
 }
 
-/* För knappen */
+
 .createCourse-form button {
   background-color: var(--color-secondary);
   color: var(--color-white);
@@ -358,18 +358,18 @@ h1 {
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Hover-effekt på knappen */
+
 .createCourse-form button:hover {
   background-color: var(--color-primary);
   transform: scale(1.05);
 }
 
-/* Aktiv knapp */
+
 .createCourse-form button:active {
   background-color: var(--color-accent);
 }
 
-/* Marginal på input, textarea och knapp */
+
 .createCourse-form input,
 .createCourse-form textarea,
 .createCourse-form button {
@@ -414,14 +414,12 @@ h1 {
   gap: 15px;
 }
 
-/* Etiketter över input-fälten */
 .createParticipant-form label {
   font-size: 1rem;
   color: var(--color-secondary);
   margin-bottom: 8px;
 }
 
-/* Input och Textarea-styling */
 .createParticipant-form input {
   padding: 12px;
   font-size: 1rem;
@@ -438,7 +436,6 @@ h1 {
   outline: none;
 }
 
-/* För knappen */
 .createParticipant-form button {
   background-color: var(--color-secondary);
   color: var(--color-white);
@@ -459,7 +456,7 @@ h1 {
   background-color: var(--color-accent);
 }
 
-/* Styling för lägg till nummer-knappen */
+
 .add-phone-btn {
   background-color: var(--color-secondary);
   color: var(--color-white);
@@ -479,4 +476,546 @@ h1 {
 
 .add-phone-btn:active {
   background-color: var(--color-accent);
+}
+
+.createInstructorPage {
+  font-family: Inter;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--color-primary);
+}
+
+.createInstructor-container {
+  background-color: var(--color-white);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  max-width: 700px;
+}
+
+.createInstructor-title {
+  text-align: center;
+  font-size: 24px;
+  color: var(--color-secondary);
+  margin-bottom: 20px;
+}
+
+.success-message {
+  color: #4caf50;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.createInstructor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.createInstructor-form label {
+  font-size: 1rem;
+  color: var(--color-secondary);
+  margin-bottom: 8px;
+}
+
+
+.createInstructor-form input {
+  padding: 12px;
+  font-size: 1rem;
+  font-family: Inter;
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  transition: border 0.3s ease;
+}
+
+.createInstructor-form input:focus {
+  border-color: var(--color-secondary);
+  outline: none;
+}
+
+
+.createInstructor-form button {
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.createInstructor-form button:hover {
+  background-color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.createInstructor-form button:active {
+  background-color: var(--color-accent);
+}
+
+.manageLocationsPage {
+  font-family: Inter;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--color-primary);
+}
+
+.createCourse-container {
+  background-color: var(--color-white);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  max-width: 700px;
+}
+
+.manageLocationsPage h1 {
+  text-align: center;
+  font-size: 24px;
+  color: var(--color-secondary);
+  margin-bottom: 20px;
+}
+
+.error-message {
+  color: #ff0000;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.location-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.location-tile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-white);
+  padding: 12px;
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.delete-location-btn {
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+  padding: 8px 16px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-location-btn:hover {
+  background-color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.delete-location-btn:active {
+  background-color: var(--color-accent);
+}
+.course-tile2 {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin: 5px 0;
+  border-radius: 5px;
+}
+
+.edit-course-btn,
+.delete-course-btn {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-course-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.delete-course-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.edit-course-btn:hover,
+.delete-course-btn:hover {
+  opacity: 0.8;
+}
+
+.manageLessonsPage {
+  background-color: var(--color-primary);
+  padding: 20px;
+}
+
+.manageLessonsContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: var(--color-white);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.manageLessonsHeader {
+  font-size: 2rem;
+  color: var(--color-secondary);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.successMessage {
+  color: #4caf50;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.errorMessage {
+  color: #ff0000;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.lessonForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.formLabel {
+  font-size: 1rem;
+  color: var(--color-secondary);
+  margin-bottom: 8px;
+}
+
+.formInput, .formSelect {
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  transition: border 0.3s ease;
+}
+
+.formInput:focus, .formSelect:focus {
+  border-color: var(--color-secondary);
+  outline: none;
+}
+
+.formButton {
+  padding: 12px 24px;
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.formButton:hover {
+  background-color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.lessonListWrapper {
+  margin-top: 10px;
+  overflow-y:scroll;
+  max-height: 350px;
+}
+
+.lessonListHeader {
+  font-size: 1.5rem;
+  color: var(--color-secondary);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.noLessonsMessage {
+  text-align: center;
+  color: var(--color-secondary);
+}
+
+.lessonTile {
+  width: 250px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out, background-color 0.3s ease, color 0.3s ease;
+  margin: 10px;
+}
+
+.lessonTile:hover {
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+}
+
+.lessonTile h3 {
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+.lessonTile p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.lessonActions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.editLessonButton, .deleteLessonButton {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.editLessonButton {
+  background-color: #4caf50;
+  color: white;
+}
+
+.deleteLessonButton {
+  background-color: #f44336;
+  color: white;
+}
+
+.editLessonButton:hover, .deleteLessonButton:hover {
+  opacity: 0.8;
+}
+
+/* Styling for update button */
+.update-button {
+  background-color: #4CAF50; /* Green color */
+  color: white;
+  margin-left: -10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.update-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+.update-button:active {
+  background-color: #388e3c; /* Even darker green on click */
+}
+
+.update-button:focus {
+  outline: none; /* Remove focus outline */
+}
+
+/* Styling for delete button */
+.delete-button {
+  background-color: #f44336; /* Red color */
+  color: white;
+  margin-left: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: #e53935; /* Darker red on hover */
+}
+
+.delete-button:active {
+  background-color: #c62828; /* Even darker red on click */
+}
+
+.delete-button:focus {
+  outline: none; /* Remove focus outline */
+}
+
+/* Optional - Styling for buttons container */
+.lesson-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+/* General styling for the page */
+.create-lesson-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.create-lesson-container {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+}
+
+/* Form container styling */
+.lesson-form {
+  flex: 1;
+  max-width: 600px;
+  background-color: var(--color-white); /* White background, matching your other pages */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Light shadow for a subtle 3D effect */
+}
+
+.lesson-form h1 {
+  text-align: center; /* Center the title */
+  font-size: 2rem; /* Larger font size */
+  color: var(--color-primary); /* Primary color for the title */
+  margin-bottom: 20px; /* Space between the title and form */
+}
+
+/* Form elements styling */
+.lesson-form .form-group {
+  margin-bottom: 15px;
+}
+
+.lesson-form .form-group label {
+  font-weight: bold;
+  color: var(--color-secondary); /* Match with your primary color for labels */
+}
+
+.lesson-form .form-group input,
+.lesson-form .form-group select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: 1px solid var(--color-primary); /* Match your primary color for borders */
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  font-size: 1rem;
+  transition: border 0.3s ease;
+}
+
+.lesson-form .form-group input:focus,
+.lesson-form .form-group select:focus {
+  outline: none;
+  border-color: var(--color-secondary); /* Highlight with secondary color on focus */
+}
+
+.lesson-form button {
+  padding: 12px 24px;
+  background-color: var(--color-secondary); /* Match the button color */
+  color: var(--color-white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.lesson-form button:hover {
+  background-color: var(--color-primary); /* Button hover effect */
+  transform: scale(1.05);
+}
+
+.lesson-form button:active {
+  background-color: var(--color-accent); /* Darker accent color when clicked */
+}
+
+/* Lesson list on the right */
+.lesson-list {
+  flex: 1;
+  max-width: 350px;
+  background-color: var(--color-white);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Similar background and shadow as the form */
+}
+
+.lesson-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.lesson-list li {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-primary); /* Use primary color border */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.lesson-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.update-button,
+.delete-button {
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 8px;
+  border: none;
+}
+
+.update-button {
+  background-color: #4CAF50; /* Green for update */
+  color: white;
+}
+
+.update-button:hover {
+  background-color: #45a049;
+}
+
+.delete-button {
+  background-color: #f44336; /* Red for delete */
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #e53935;
+}
+
+/* Success/Error messages */
+.success-message {
+  color: #4caf50; /* Green for success */
+}
+
+.error-message {
+  color: #f44336; /* Red for error */
 }

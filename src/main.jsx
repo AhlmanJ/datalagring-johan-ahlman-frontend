@@ -5,6 +5,7 @@ import CourseLessonsDetailsPage from './pages/CourseLessonsDetailsPage'
 import InstructorAdmin from './pages/InstructorAdminPage'
 import ParticipantAdmin from './pages/ParticipantAdminPage'
 import CourseAdmin from './pages/CourseAdminPage'
+import LocationAdmin from './pages/LocationAdmin'
 import LessonAdmin from './pages/LessonAdminPage'
 import './index.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
@@ -22,6 +23,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/create-participant" element={<ParticipantAdmin />} />
         <Route path="/create-course" element={<CourseAdmin />} />
         <Route path="/create-lesson" element={<LessonAdmin />} />
+        <Route path="/manage-locations" element={<LocationAdmin />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
