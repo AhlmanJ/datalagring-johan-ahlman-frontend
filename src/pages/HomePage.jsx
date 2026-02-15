@@ -26,7 +26,7 @@ export default function HomePage() {
 
       if (lessonsData.length === 0) {
         // Display message if no lessons are available for the selected course
-        alert("Inga lektioner finns tillgängliga ännu.");
+        alert("No lessons available for this course.");
       } else {
         // Navigate to the lessons page for the selected course
         navigate(`/courses/${courseId.toUpperCase()}/lessons`);
