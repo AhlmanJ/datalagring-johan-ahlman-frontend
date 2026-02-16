@@ -200,7 +200,6 @@ export default function LessonsPage() {
                 <p>{formatDate(lesson.startDate)} - {formatDate(lesson.endDate)}</p>
                 <p>Capacity: {lesson.maxCapacity}</p>
                 <p>Available spaces: {lesson.maxCapacity - lesson.enrolled}</p>
-                <p>Course name: {lesson.courseName}</p>
                 <p>Location: {lesson.location}</p>
                 <p>Instructor: {lesson.instructors}</p>
               </div>
