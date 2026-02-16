@@ -11,24 +11,42 @@ export default function CreateLesson() {
   const [courseId, setCourseId] = useState("");
   const [lessons, setLessons] = useState([]);
   const [message, setMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // <-- for storing backend error messages
   const [editingLessonId, setEditingLessonId] = useState(null);
   const [email, setEmail] = useState(""); 
   const navigate = useNavigate();
 
+  // Help function to fetch with backend error handling
+  const fetchWithBackendError = async (url, options) => {
+    const res = await fetch(url, options);
+
+    // If response is not ok, try to parse backend error message
+    if (!res.ok) {
+      let errData = {};
+      try {
+        errData = await res.json();
+      } catch {}
+      throw new Error(errData.detail || errData.title || `HTTP error ${res.status}`);
+    }
+
+    // If response is ok, return JSON or null
+    const text = await res.text();
+    return text ? JSON.parse(text) : null;
+  };
+
+  // get courses on load
   useEffect(() => {
-    fetch("https://localhost:7253/api/courses")
-      .then((res) => res.json())
+    fetchWithBackendError("https://localhost:7253/api/courses")
       .then((data) => setCourses(data))
-      .catch((err) => console.error("Error fetching courses:", err));
+      .catch((err) => setErrorMessage(err.message));
   }, []);
 
+  // Fetch lessons when courseId changes
   useEffect(() => {
     if (courseId) {
-      fetch(`https://localhost:7253/api/courses/${courseId}/lessons`)
-        .then((res) => res.json())
+      fetchWithBackendError(`https://localhost:7253/api/courses/${courseId}/lessons`)
         .then((data) => setLessons(data))
-        .catch((err) => console.error("Error fetching lessons:", err));
+        .catch((err) => setErrorMessage(err.message));
     }
   }, [courseId]);
 
@@ -38,47 +56,40 @@ export default function CreateLesson() {
     const formattedCourseId = courseId.toUpperCase();
     const payload = {
       name: lessonName,
-      startDate: startDate,
-      endDate: endDate,
+      startDate,
+      endDate,
       maxCapacity: capacity,
       locationName: location,
     };
 
-    if (editingLessonId) {
-      
-      try {
-        const response = await fetch(`https://localhost:7253/api/courses/lessons/${editingLessonId}`, {
+    try {
+      if (editingLessonId) {
+        await fetchWithBackendError(`https://localhost:7253/api/courses/lessons/${editingLessonId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        if (!response.ok) throw new Error("Error updating lesson");
         setMessage("Lesson updated successfully!");
         setEditingLessonId(null);
         setLessonName("");
         setStartDate("");
         setEndDate("");
         setCapacity("");
-      } catch (error) {
-        setErrorMessage("Error updating lesson, please try again.");
-      }
-    } else {
-      try {
-        const response = await fetch(`https://localhost:7253/api/courses/createLesson/${formattedCourseId}`, {
+      } else {
+        await fetchWithBackendError(`https://localhost:7253/api/courses/createLesson/${formattedCourseId}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        if (!response.ok) throw new Error("Error creating lesson");
         setMessage("Lesson created successfully!");
         setLessonName("");
         setStartDate("");
         setEndDate("");
         setCapacity("");
         setLocation("");
-      } catch (error) {
-        setErrorMessage("Error creating lesson, please try again.");
       }
+    } catch (error) {
+      setErrorMessage(error.message); // <-- Display backend error message
     }
   };
 
@@ -88,18 +99,17 @@ export default function CreateLesson() {
     setStartDate(lesson.startDate);
     setEndDate(lesson.endDate);
     setCapacity(lesson.maxCapacity);
-    setLocation(lesson.locationName);
+    setLocation(lesson.location);
     setEmail(lesson.email);
   };
 
   const handleDeleteLesson = async (lessonId) => {
     try {
-      const response = await fetch(`https://localhost:7253/api/courses/lessons/${lessonId}`, { method: "DELETE" });
-      if (!response.ok) throw new Error("Error deleting lesson");
+      await fetchWithBackendError(`https://localhost:7253/api/courses/lessons/${lessonId}`, { method: "DELETE" });
       setLessons(lessons.filter((lesson) => lesson.id !== lessonId));
       setMessage("Lesson deleted successfully!");
     } catch (error) {
-      setErrorMessage("Error deleting lesson, please try again.");
+      setErrorMessage(error.message);
     }
   };
 
@@ -108,7 +118,7 @@ export default function CreateLesson() {
       <div className="create-lesson-container">
         <h1>{editingLessonId ? "Edit Lesson" : "Create / Edit Lesson"}</h1>
         {message && <p className="success-message">{message}</p>}
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        {errorMessage && <p className="error-message">{errorMessage}</p>} {/* <-- Dispaly backend error messages */}
 
         {/* Lesson creation form */}
         <form onSubmit={handleSubmit} className="lesson-form">
@@ -117,9 +127,7 @@ export default function CreateLesson() {
             <select id="course" value={courseId} onChange={(e) => setCourseId(e.target.value)} required>
               <option value="">-- Select a course --</option>
               {courses.map((course) => (
-                <option key={course.id} value={course.id}>
-                  {course.name}
-                </option>
+                <option key={course.id} value={course.id}>{course.name}</option>
               ))}
             </select>
           </div>
@@ -139,38 +147,26 @@ export default function CreateLesson() {
             <label htmlFor="capacity">Capacity:</label>
             <input type="number" id="capacity" value={capacity} onChange={(e) => setCapacity(e.target.value)} required={!editingLessonId} />
           </div>
-
-          {/* Location field is hidden when editing */}
           {!editingLessonId && (
             <div className="form-group">
               <label htmlFor="location">Location:</label>
-              <input
-                type="text"
-                id="location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                required
-              />
+              <input type="text" id="location" value={location} onChange={(e) => setLocation(e.target.value)} required />
             </div>
           )}
-
           <button type="submit">{editingLessonId ? "Update Lesson" : "Create Lesson"}</button>
         </form>
 
-        {/* List of existing lessons */}
         {courseId && (
           <div className="lesson-list">
             <h2>Existing Lessons</h2>
-            {lessons.length === 0 ? (
-              <p>No lessons available for this course.</p>
-            ) : (
+            {lessons.length === 0 ? <p>No lessons available for this course.</p> : (
               <ul>
                 {lessons.map((lesson) => (
                   <li key={lesson.id}>
                     <h3>{lesson.name}</h3>
                     <p><strong>Start:</strong> {lesson.startDate}</p>
                     <p><strong>End:</strong> {lesson.endDate}</p>
-                    <p><strong>Location:</strong> {lesson.locationName}</p>
+                    <p><strong>Location:</strong> {lesson.location}</p>
                     <p><strong>Capacity:</strong> {lesson.maxCapacity}</p>
                     <div className="lesson-actions">
                       <button onClick={() => handleUpdateLesson(lesson)} className="update-button">Update</button>

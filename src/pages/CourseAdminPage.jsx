@@ -13,11 +13,15 @@ export default function CreateCourse() {
     const fetchCourses = async () => {
       try {
         const response = await fetch("https://localhost:7253/api/courses");
-        if (!response.ok) throw new Error("Error fetching courses");
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.detail || errorData.title || `Error fetching courses (status ${response.status})`);
+        }
         const data = await response.json();
         setCourses(data);
       } catch (error) {
         console.error("Error fetching courses:", error);
+        setErrorMessage(error.message);
       }
     };
 
@@ -49,46 +53,40 @@ export default function CreateCourse() {
     };
 
     try {
+      let response;
       if (editingCourseId) {
         // PUT request to update course
-        const response = await fetch(
+        response = await fetch(
           `https://localhost:7253/api/courses/${editingCourseId}`,
           {
             method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
           }
         );
-
-        if (!response.ok) throw new Error("Error updating course");
-
-        setMessage("Course updated successfully!");
       } else {
         // POST request to create a new course
-        const response = await fetch("https://localhost:7253/api/courses", {
+        response = await fetch("https://localhost:7253/api/courses", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-
-        if (!response.ok) throw new Error("Error creating course");
-
-        setMessage("Course created successfully!");
       }
 
-      // Reset form fields and state
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || errorData.title || `Error ${response.status}`);
+      }
+
+      setMessage(editingCourseId ? "Course updated successfully!" : "Course created successfully!");
       setCourseName("");
       setCourseDescription("");
-      setEditingCourseId(null); // Reset to create mode after successful operation
+      setEditingCourseId(null);
 
-      // Refetch courses after create or update
-      const response = await fetch("https://localhost:7253/api/courses");
-      const data = await response.json();
-      setCourses(data);
+      // Refetch courses
+      const fetchResponse = await fetch("https://localhost:7253/api/courses");
+      const fetchData = await fetchResponse.json();
+      setCourses(fetchData);
     } catch (error) {
       console.error("Error during course creation or update:", error);
       setErrorMessage(error.message);
@@ -97,7 +95,7 @@ export default function CreateCourse() {
 
   // Handle updating course
   const handleUpdateCourse = (course) => {
-    setEditingCourseId(course.id); // Set the course ID for editing
+    setEditingCourseId(course.id);
     setCourseName(course.name);
     setCourseDescription(course.description);
   };
@@ -105,21 +103,19 @@ export default function CreateCourse() {
   // Handle deleting course
   const handleDeleteCourse = async (courseId) => {
     try {
-      const response = await fetch(
-        `https://localhost:7253/api/courses/${courseId}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (!response.ok) throw new Error("Error deleting course");
+      const response = await fetch(`https://localhost:7253/api/courses/${courseId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || errorData.title || `Error deleting course (status ${response.status})`);
+      }
 
       setMessage("Course deleted successfully!");
-
-      // Remove the course from the list locally
       setCourses(courses.filter((course) => course.id !== courseId));
     } catch (error) {
       console.error("Error deleting course:", error);
-      setErrorMessage("Error deleting course, please try again.");
+      setErrorMessage(error.message);
     }
   };
 
@@ -170,16 +166,10 @@ export default function CreateCourse() {
                   <h3>{course.name}</h3>
                   <p><strong>Description:</strong> {course.description}</p>
                   <div className="course-actions">
-                    <button
-                      onClick={() => handleUpdateCourse(course)}
-                      className="update-button"
-                    >
+                    <button onClick={() => handleUpdateCourse(course)} className="update-button">
                       Update
                     </button>
-                    <button
-                      onClick={() => handleDeleteCourse(course.id)}
-                      className="delete-button"
-                    >
+                    <button onClick={() => handleDeleteCourse(course.id)} className="delete-button">
                       Delete
                     </button>
                   </div>

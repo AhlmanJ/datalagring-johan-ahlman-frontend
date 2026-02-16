@@ -11,23 +11,28 @@ export default function RegisterInstructorPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Fetch courses, instructors, and lessons when component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Get courses
         const coursesResponse = await fetch("https://localhost:7253/api/courses");
+        if (!coursesResponse.ok) {
+          const errorData = await coursesResponse.json().catch(() => null);
+          throw new Error(errorData?.detail || "Error fetching courses");
+        }
         const coursesData = await coursesResponse.json();
         setCourses(coursesData);
 
-        // Get instructors
         const instructorsResponse = await fetch("https://localhost:7253/api/instructors");
+        if (!instructorsResponse.ok) {
+          const errorData = await instructorsResponse.json().catch(() => null);
+          throw new Error(errorData?.detail || "Error fetching instructors");
+        }
         const instructorsData = await instructorsResponse.json();
         setInstructors(instructorsData);
 
       } catch (error) {
         console.error("Error fetching data:", error);
-        setErrorMessage("An error occurred while fetching courses, instructors.");
+        setErrorMessage(error.message);
       } finally {
         setLoading(false);
       }
@@ -36,23 +41,26 @@ export default function RegisterInstructorPage() {
     fetchData();
   }, []);
 
-  // When selectedCourse changes, fetch the lessons for that course
   useEffect(() => {
     const fetchLessons = async () => {
       if (selectedCourse) {
         try {
           const lessonsResponse = await fetch(`https://localhost:7253/api/courses/${selectedCourse}/lessons`);
+          if (!lessonsResponse.ok) {
+            const errorData = await lessonsResponse.json().catch(() => null);
+            throw new Error(errorData?.detail || "Error fetching lessons for selected course");
+          }
           const lessonsData = await lessonsResponse.json();
           setLessons(lessonsData);
         } catch (error) {
           console.error("Error fetching lessons:", error);
-          setErrorMessage("An error occurred while fetching lessons for the selected course.");
+          setErrorMessage(error.message);
         }
       }
     };
 
     fetchLessons();
-  }, [selectedCourse]);  // Get lessons every time the selected course changes
+  }, [selectedCourse]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,20 +75,21 @@ export default function RegisterInstructorPage() {
         `https://localhost:7253/api/instructors/${selectedInstructor}/lesson/${selectedLesson}`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         }
       );
 
-      if (!enrollResponse.ok) throw new Error("Error registering instructor to lesson");
+      if (!enrollResponse.ok) {
+        const errorData = await enrollResponse.json().catch(() => null);
+        throw new Error(errorData?.detail || "Error registering instructor to lesson");
+      }
 
       setMessage("Instructor successfully registered for the lesson!");
       setSelectedInstructor("");
       setSelectedLesson("");
     } catch (error) {
       console.error("Error during registration:", error);
-      setErrorMessage("An error occurred while registering the instructor.");
+      setErrorMessage(error.message);
     }
   };
 

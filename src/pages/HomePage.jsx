@@ -45,7 +45,7 @@ export default function HomePage() {
         </h1>
 
         {courses.length === 0 ? (
-          <p>No courses available.</p>
+          <p>No course available.</p>
         ) : (
           <div className="coursesTiles-wrapper">
             {courses.map((course) => (
