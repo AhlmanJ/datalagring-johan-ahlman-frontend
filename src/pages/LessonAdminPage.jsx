@@ -106,7 +106,7 @@ export default function CreateLesson() {
   return (
     <div className="create-lesson-page">
       <div className="create-lesson-container">
-        <h1>{editingLessonId ? "Edit Lesson" : "Create Lesson"}</h1>
+        <h1>{editingLessonId ? "Edit Lesson" : "Create / Edit Lesson"}</h1>
         {message && <p className="success-message">{message}</p>}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
 

@@ -47,7 +47,7 @@ export default function CreateInstructor() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!firstName || !lastName || !email || !expertise || !selectedLesson) {
+    if (!firstName || !lastName || !email || !expertise) {
       setErrorMessage("All fields are required.");
       return;
     }
@@ -77,7 +77,7 @@ export default function CreateInstructor() {
 
         // Then associate the instructor with the selected lesson
         const associateInstructorResponse = await fetch(
-          `https://localhost:7253/api/instructors/${editingInstructorId}/lesson/${selectedLesson}`,
+          `https://localhost:7253/api/instructors/${editingInstructorId}/lesson`,
           {
             method: "PUT",
             headers: {
@@ -85,7 +85,7 @@ export default function CreateInstructor() {
             },
           }
         );
-        if (!associateInstructorResponse.ok) throw new Error("Error associating instructor to lesson");
+        
 
         setMessage("Instructor updated and associated with lesson successfully!");
       } else {
@@ -109,7 +109,6 @@ export default function CreateInstructor() {
       setEmail("");
       setExpertise("");
       setSelectedLesson("");  // Reset selected lesson
-      setEditingInstructorId(null);
 
       const fetchResponse = await fetch("https://localhost:7253/api/instructors");
       const data = await fetchResponse.json();
@@ -127,7 +126,6 @@ export default function CreateInstructor() {
     setLastName(instructor.lastName);
     setEmail(instructor.email);
     setExpertise(instructor.expertise);
-    setSelectedLesson(instructor.lessonId);  // Set selected lesson for editing
   };
 
   // Handle deleting instructor
