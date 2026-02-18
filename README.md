@@ -4,7 +4,7 @@ I'm studying to become a .NET Developer at EC Utbildning and this is my fourth s
 
 NOTE! ---- > This code were built by AI and tested by me!
 
-This repository represents the frontend part and i was allowed to use AI to generate the code, as long as i understood and could explain the code. During the process building the code with chatGPT i tested all parts of the code to make sure that all parts integrated and responded with the backend. After the code was built, i asked chatGPT to do a test where i was asked questions about all parts of the code and i had to explain to the AI what the code does and why. I was approved by the AI ​​(I have saved screenshots of the AI ​​answers about my knowledge in case it is needed to pass the course)
+This repository represents the frontend part and i was allowed to use AI to generate the code, as long as i understood and could explain the code. During the process building the code with chatGPT i tested all parts of the code to make sure that all parts integrated and responded with the backend. After the code was built, i asked chatGPT to do a test where i was asked questions about all parts of the code and i had to explain to the AI what the code does and why. I was approved by the AI ​​(I have saved screenshots of the AI ​​answers about my knowledge in case it is needed to pass the course).
 
 <u>Why use AI when you're still learning?</u>
 - Because the main focus of this assignment was data storage and backend and i wanted to spend as much time as possible lerning the backend.
