@@ -1,3 +1,6 @@
+
+NOTE! ---- > This code were built by AI and tested by me! <----
+
 Hi! 
 
 I'm studying to become a .NET Developer at EC Utbildning and this is my fourth school assignment. This assignment was done for the course "Data Storage". The main focus of this assignment was to carry out modeling, normalization and implementation of a relational database. However, in order to be able to test the backend part wich was the main focus of the assignment, i would also create a frontend that integrated with the backend through the Endpoints that i had created in my minimalAPI.
