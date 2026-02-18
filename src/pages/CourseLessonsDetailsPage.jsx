@@ -2,65 +2,106 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 export default function LessonsPage() {
-  const { courseId } = useParams(); // Get course-ID from the URL-parameter
+  const { courseId } = useParams();
   const [lessons, setLessons] = useState([]);
   const [participants, setParticipants] = useState([]);
-  const [enrollments, setEnrollments] = useState([]);  // To store enrollments data
+  const [enrollments, setEnrollments] = useState([]);
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [selectedParticipant, setSelectedParticipant] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Simple date format function
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleString(); // You can customize the format here
+    return date.toLocaleString();
   };
 
-  // Fetch lessons, participants, and enrollments when the page loads
-  useEffect(() => {
-    console.log("Course ID:", courseId);
+  // Helper to extract error messages from backend responses
+  const getErrorMessage = async (res) => {
+    const contentType = res.headers.get("content-type");
+    let data = null;
 
-    if (!courseId) {
-      console.error("Course ID is undefined");
-      return;
+    if (contentType && contentType.includes("application/json")) {
+      data = await res.json().catch(() => null);
+    } else {
+      data = await res.text().catch(() => null);
     }
+
+    // If the response is a string, try to parse it as JSON to extract more details
+    if (typeof data === "string") {
+      try {
+        data = JSON.parse(data);
+      } catch {
+        // Keep it as a string if it can't be parsed
+      }
+    }
+
+    // Return the most relevant error message
+    return data?.detail || data?.message || data?.error || (typeof data === "string" && data) || "Something went wrong.";
+  };
+
+  // Helper to handle backend responses
+  const handleResponse = async (res) => {
+    if (!res.ok) {
+      const errorMessage = await getErrorMessage(res);
+      throw new Error(errorMessage);
+    }
+
+    const contentType = res.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      return res.json();
+    } else {
+      return res.text();
+    }
+  };
+
+  // Fetch enrollments from backend
+  const fetchEnrollments = () => {
+    fetch("https://localhost:7253/api/enrollments")
+      .then(handleResponse)
+      .then((data) => {
+        console.log("Enrollments from backend:", data);
+        setEnrollments(data);
+      })
+      .catch((err) => {
+        console.error("Error fetching enrollments:", err);
+        alert(err.message);
+      });
+  };
+
+  useEffect(() => {
+    if (!courseId) return;
 
     // Fetch lessons
     fetch(`https://localhost:7253/api/courses/${courseId}/lessons`)
-      .then((res) => res.json())
+      .then(handleResponse)
       .then((data) => {
-        console.log("Lessons data:", data);
         setLessons(data);
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Fetch error:", err);
+        console.error(err);
+        alert(err.message);
         setLoading(false);
       });
 
     // Fetch participants
     fetch("https://localhost:7253/api/participants")
-      .then((res) => res.json())
+      .then(handleResponse)
       .then((data) => {
         setParticipants(data);
-        console.log("Participants data:", data);
       })
-      .catch((err) => console.error("Error fetching participants:", err));
+      .catch((err) => {
+        console.error(err);
+        alert(err.message);
+      });
 
-    // Fetch all enrollments to associate with participants and load from localStorage
-    const savedEnrollments = JSON.parse(localStorage.getItem("enrollments")) || [];
-    setEnrollments(savedEnrollments);
-    console.log("Enrollments data from localStorage:", savedEnrollments);
+    fetchEnrollments();
 
-  }, [courseId]); // The effect runs every time the courseId changes
+  }, [courseId]);
 
-  // Handle booking a participant to a lesson
+  // BOOK
   const handleBooking = () => {
-    console.log("Booking button clicked");
     if (selectedLesson && selectedParticipant) {
-      console.log("Selected Lesson ID:", selectedLesson.id);
-      console.log("Selected Participant ID:", selectedParticipant.participantId);
-
       const participantId = selectedParticipant.participantId.toUpperCase();
       const lessonId = selectedLesson.id.toUpperCase();
 
@@ -69,115 +110,73 @@ export default function LessonsPage() {
         lessonsId: lessonId
       };
 
-      const bookingUrl = `https://localhost:7253/api/enrollments?participantId=${participantId}&lessonsId=${lessonId}`;
+      const bookingUrl =
+        `https://localhost:7253/api/enrollments?participantId=${participantId}&lessonsId=${lessonId}`;
 
       fetch(bookingUrl, {
-        method: "POST", // Use POST since we are creating a new resource
-        headers: {
-          "Content-Type": "application/json",
-        },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bookingData),
       })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-          }
-          return res.json();
-        })
-        .then((data) => {
-          console.log("Booking successful:", data);
-
-          // Update enrollments after booking
-          const newEnrollment = { 
-            participantId: selectedParticipant.participantId, 
-            lessonName: selectedLesson.name, 
-            enrollmentId: data.enrollmentId 
-          };
-
-          // Update enrollments state
-          setEnrollments((prevEnrollments) => [...prevEnrollments, newEnrollment]);
-
-          // Save the updated enrollments to localStorage
-          const updatedEnrollments = [...enrollments, newEnrollment];
-          localStorage.setItem("enrollments", JSON.stringify(updatedEnrollments));
-
+        .then(handleResponse)
+        .then(() => {
           alert("Booking successful!");
+          fetchEnrollments();
         })
         .catch((err) => {
           console.error("Booking failed:", err);
-          alert("Something went wrong while booking the lesson.");
+          alert(err.message);
         });
+
     } else {
       alert("Please select both a lesson and a participant.");
     }
   };
 
-  // Handle deleting a participant's enrollment
+  // DELETE
   const handleDeleteBooking = () => {
     if (selectedLesson && selectedParticipant) {
-      const participantId = selectedParticipant.participantId.toUpperCase();
-      const lessonName = selectedLesson.name; // lessonName is now lesson's name
-
-      // Step 1: Find the enrollmentId that matches the lessonName
       const enrollment = enrollments.find(
-        (e) => e.lessonName === lessonName && e.participantId === selectedParticipant.participantId
+        (e) =>
+          e.lessonName === selectedLesson.name &&
+          e.email === selectedParticipant.email
       );
 
-      if (enrollment) {
-        const enrollmentId = enrollment.enrollmentId;
-
-        // Step 2: Send DELETE request with the enrollmentId
-        const deleteUrl = `https://localhost:7253/api/enrollments/${enrollmentId}/${lessonName}/${participantId}`;
-        fetch(deleteUrl, {
-          method: "DELETE", // DELETE method to remove the booking
-        })
-          .then((res) => {
-            if (!res.ok) {
-              throw new Error(`HTTP error! status: ${res.status}`);
-            }
-
-            // Remove the enrollment from localStorage
-            const savedEnrollments = JSON.parse(localStorage.getItem("enrollments")) || [];
-            const updatedEnrollments = savedEnrollments.filter(
-              (e) => e.enrollmentId !== enrollmentId
-            );
-            
-            // If there are no enrollments left, remove the whole key from localStorage
-            if (updatedEnrollments.length === 0) {
-              localStorage.removeItem("enrollments");
-            } else {
-              localStorage.setItem("enrollments", JSON.stringify(updatedEnrollments));
-            }
-
-            // Remove the enrollment from state as well
-            setEnrollments(updatedEnrollments);
-
-            alert("Booking has been successfully removed!");
-          })
-          .catch((err) => {
-            console.error("Delete failed:", err);
-            alert("Something went wrong while deleting the booking.");
-          });
-      } else {
+      if (!enrollment) {
         alert("Enrollment not found for the selected lesson.");
+        return;
       }
+
+      const deleteUrl =
+        `https://localhost:7253/api/enrollments/${enrollment.enrollmentId}/${selectedLesson.name}/${selectedParticipant.participantId}`;
+
+      fetch(deleteUrl, { method: "DELETE" })
+        .then(handleResponse)
+        .then(() => {
+          alert("Booking has been successfully removed!");
+          fetchEnrollments();
+        })
+        .catch((err) => {
+          console.error("Delete failed:", err);
+          alert(err.message);
+        });
+
     } else {
       alert("Please select both a lesson and a participant to delete.");
     }
   };
 
-  // Add enrolled lesson name to each participant in dropdown
-  const getEnrolledLessonName = (participantId) => {
+  const getEnrolledLessonName = (participantEmail) => {
     const enrollment = enrollments.find(
-      (e) => e.participantId === participantId
+      (e) => e.email === participantEmail
     );
-    return enrollment ? enrollment.lessonName : "Not enrolled"; // Return "Not enrolled" if no lesson found
+    return enrollment ? enrollment.lessonName : "Not enrolled";
   };
 
   if (loading) {
     return <p>Loading lessons...</p>;
   }
-  
+
   return (
     <div className="lessonsPage">
       <h1>Lessons for Course: <div className="course-id">{courseId}</div></h1>
@@ -191,10 +190,7 @@ export default function LessonsPage() {
               <div
                 key={lesson.id}
                 className="lesson-tile"
-                onClick={() => {
-                  setSelectedLesson(lesson);
-                  console.log("Selected Lesson:", lesson);
-                }}
+                onClick={() => setSelectedLesson(lesson)}
               >
                 <h3>{lesson.name}</h3>
                 <p>{formatDate(lesson.startDate)} - {formatDate(lesson.endDate)}</p>
@@ -215,17 +211,20 @@ export default function LessonsPage() {
               id="participants"
               onChange={(e) => {
                 const selectedId = e.target.value;
-                console.log("Selected Participant ID:", selectedId);
-                const participant = participants.find((p) => p.participantId === selectedId);
+                const participant = participants.find(
+                  (p) => p.participantId === selectedId
+                );
                 setSelectedParticipant(participant);
-                console.log("Selected Participant:", participant);
               }}
             >
               <option value="">Select participant</option>
               {participants.map((participant) => (
-                <option key={participant.participantId} value={participant.participantId}>
-                  {participant.firstName} {participant.lastName} 
-                  {` - ${getEnrolledLessonName(participant.participantId)}`}  {/* Show lesson name if enrolled */}
+                <option
+                  key={participant.participantId}
+                  value={participant.participantId}
+                >
+                  {participant.firstName} {participant.lastName}
+                  {` - ${getEnrolledLessonName(participant.email)}`}
                 </option>
               ))}
             </select>
@@ -235,5 +234,5 @@ export default function LessonsPage() {
         )}
       </div>
     </div>
-  ); 
+  );
 }
