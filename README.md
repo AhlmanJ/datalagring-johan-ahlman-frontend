@@ -14,7 +14,7 @@ This repository represents the frontend part and i was allowed to use AI to gene
 - Start the project in Visual Studio Code.
 - Open the console in Visual Studio Code ( Click on "Terminal" and select "New terminal" ).
 - In the console, insert: npm run dev
-- You should now get a link to a " http://localhost:****/
+- You should now get a link to a "localHost".
 - Hold "ctrl" + left click on the link.
 - The program will now open a web page where you can see the frontend.
 
